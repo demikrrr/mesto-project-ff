@@ -1,13 +1,32 @@
+import { 
+  cardTemplate,
+  popupCard,
+  popupCardImage,
+  popupCardCaption
+} from "../index.js";
+
+import { 
+  openPopup
+} from "./modal.js";
+
 // Функция создания карточки
 
-export function createCard(name, link, deleteCard, likeCard) {
-  const cardTemplate = document.querySelector('#card-template').content; 
+export function createCard(cardData) {
+
   const card = cardTemplate.querySelector('.card').cloneNode(true);
-  card.querySelector('.card__title').textContent = name;
-  card.querySelector('.card__image').src = link;
-  card.querySelector('.card__image').alt = name;
-  card.querySelector('.card__delete-button').addEventListener('click', deleteCard);
-  card.querySelector('.card__like-button').addEventListener('click', likeCard);
+  const cardImage = card.querySelector('.card__image');
+  const cardTitle = card.querySelector('.card__title');
+  const cardDeleteButton = card.querySelector('.card__delete-button');
+  const cardLikeButton = card.querySelector('.card__like-button');
+
+  cardTitle.textContent = cardData.name;
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+
+  cardDeleteButton.addEventListener('click', deleteCard);
+  cardLikeButton.addEventListener('click', likeCard);
+  cardImage.addEventListener('click', () => {openPopupImage(cardData)});
+
   return card;
 };
 
@@ -26,3 +45,11 @@ export function likeCard (event) {
   };
 };
 
+// Функция развертывания картинки
+
+function openPopupImage (cardData) {
+  openPopup(popupCard);
+  popupCardImage.src = cardData.link;
+  popupCardImage.alt = cardData.name;
+  popupCardCaption.textContent = cardData.name;
+}
