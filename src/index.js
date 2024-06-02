@@ -1,7 +1,9 @@
 import "./pages/index.css";
 
 import { 
-  createCard
+  createCard,
+  likeCard,
+  deleteCard
 } from "./components/card.js";
 
 import { 
@@ -10,17 +12,8 @@ import {
   listenPopup
 } from "./components/modal.js";
 
-export {
-  cardTemplate,
-  placesList,
-  popupCard,
-  popupCardImage,
-  popupCardCaption
-}
-
 // Константы
 
-const cardTemplate = document.querySelector('#card-template').content; 
 const placesList = document.querySelector('.places__list');
 const popups = document.querySelectorAll('.popup');
 const popupEditProfile = document.querySelector('.popup_type_edit');
@@ -49,6 +42,15 @@ document.querySelector('.profile__add-button').addEventListener('click', functio
   openPopup(popupAddNewCard);
 });
 
+// Функция развертывания картинки
+
+function openPopupImage (cardData) {
+  openPopup(popupCard);
+  popupCardImage.src = cardData.link;
+  popupCardImage.alt = cardData.name;
+  popupCardCaption.textContent = cardData.name;
+}
+
 // Вызов "слушателя" на модальные окна
 
 popups.forEach(function (popup) {
@@ -72,7 +74,10 @@ function addNewCardSubmit(event) {
   event.preventDefault();
   const newCardObject = {
     name: namePlaceInput.value,
-    link: linkPlaceInput.value
+    link: linkPlaceInput.value,
+    likeFunktion: likeCard,
+    deleteFunction: deleteCard,
+    openImageFunction: openPopupImage
   };
   placesList.prepend(createCard(newCardObject));
   closePopup(popupAddNewCard);
@@ -86,5 +91,12 @@ formElementNewCard.addEventListener('submit', addNewCardSubmit);
 import {initialCards} from './components/cards.js';
 
 initialCards.forEach(function (item) {
-  placesList.append(createCard(item));
+  const CardObject = {
+    name: item.name,
+    link: item.link,
+    likeFunktion: likeCard,
+    deleteFunction: deleteCard,
+    openImageFunction: openPopupImage
+  };
+  placesList.append(createCard(CardObject));
 });

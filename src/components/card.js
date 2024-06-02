@@ -1,13 +1,6 @@
-import { 
-  cardTemplate,
-  popupCard,
-  popupCardImage,
-  popupCardCaption
-} from "../index.js";
+// Константы
 
-import { 
-  openPopup
-} from "./modal.js";
+const cardTemplate = document.querySelector('#card-template').content;
 
 // Функция создания карточки
 
@@ -23,9 +16,9 @@ export function createCard(cardData) {
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
 
-  cardDeleteButton.addEventListener('click', deleteCard);
-  cardLikeButton.addEventListener('click', likeCard);
-  cardImage.addEventListener('click', () => {openPopupImage(cardData)});
+  cardDeleteButton.addEventListener('click', cardData.deleteFunction);
+  cardLikeButton.addEventListener('click', cardData.likeFunktion);
+  cardImage.addEventListener('click', () => {cardData.openImageFunction(cardData)});
 
   return card;
 };
@@ -44,12 +37,3 @@ export function likeCard (event) {
     event.target.classList.toggle('card__like-button_is-active');
   };
 };
-
-// Функция развертывания картинки
-
-function openPopupImage (cardData) {
-  openPopup(popupCard);
-  popupCardImage.src = cardData.link;
-  popupCardImage.alt = cardData.name;
-  popupCardCaption.textContent = cardData.name;
-}
