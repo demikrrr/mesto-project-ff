@@ -12,6 +12,12 @@ import {
   listenPopup
 } from "./components/modal.js";
 
+import { 
+  enableValidation, 
+  validationConfig, 
+  clearValidation
+} from "./components/validations.js";
+
 // Константы
 
 const placesList = document.querySelector('.places__list');
@@ -75,7 +81,7 @@ function addNewCardSubmit(event) {
   const newCardObject = {
     name: namePlaceInput.value,
     link: linkPlaceInput.value,
-    likeFunktion: likeCard,
+    likeFunction: likeCard,
     deleteFunction: deleteCard,
     openImageFunction: openPopupImage
   };
@@ -91,12 +97,15 @@ formElementNewCard.addEventListener('submit', addNewCardSubmit);
 import {initialCards} from './components/cards.js';
 
 initialCards.forEach(function (item) {
-  const CardObject = {
+  const сardObject = {
     name: item.name,
     link: item.link,
-    likeFunktion: likeCard,
+    likeFunction: likeCard,
     deleteFunction: deleteCard,
     openImageFunction: openPopupImage
   };
-  placesList.append(createCard(CardObject));
+  placesList.append(createCard(сardObject));
 });
+
+//активация валидации полей ввода
+enableValidation(validationConfig);
