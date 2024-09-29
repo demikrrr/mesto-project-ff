@@ -1,8 +1,8 @@
-// Константы
+//константы
 
 const cardTemplate = document.querySelector('#card-template').content;
 
-// Функция создания карточки
+//функция создания карточки
 
 export function createCard(cardData) {
 
@@ -23,14 +23,14 @@ export function createCard(cardData) {
   return card;
 };
 
-// Функция удаления карточки
+//функция удаления карточки
 
 export function deleteCard(event) {
   const placeDelete = event.target.closest('.card');
   placeDelete.remove();
 };
 
-// Функция лайка карточки
+//функция лайка карточки
 
 export function likeCard (event) {
   if (event.target.classList.contains('card__like-button')) {

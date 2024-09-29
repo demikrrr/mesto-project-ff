@@ -7,6 +7,19 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  background-image: url(../../../images/avatar.jpg);
+}
+
+.profile__image:hover::after {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.80); 
+  background-image: url(../../../images/Vector.svg);
+  content: '';
+  cursor: pointer;    
+  block-size: 120px;  
+  background-repeat: no-repeat;
+  background-position: center;  
+  inline-size: 120px; 
 }
 
 @media screen and (max-width: 740px) {
