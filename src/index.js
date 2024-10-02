@@ -3,7 +3,8 @@ import "./pages/index.css";
 import { 
   createCard,
   likeCard,
-  deleteCard
+  deleteCard,
+  isMyLike
 } from "./components/card.js";
 
 import { 
@@ -97,6 +98,12 @@ Promise.all([getUserData(), getInitialCards()])
     profileAvatar.style.backgroundImage = `url(\\${profileData.avatar})`;
 
     cardsData.forEach((card) => {
+
+      let cardHaveMyLike = '';
+      if(isMyLike(card, profileData._id)) {
+        cardHaveMyLike = 'true';
+      } else {cardHaveMyLike = 'false'};
+
       const сardObject = {
         name: card.name,
         link: card.link,
@@ -105,9 +112,12 @@ Promise.all([getUserData(), getInitialCards()])
         openImageFunction: openPopupImage,
         cardId: card._id,
         ownerId: card.owner._id,
-        profileId: profileData._id
+        profileId: profileData._id,
+        cardNumberLikes: card.likes.length,
+        cardHaveMyLikeElement: cardHaveMyLike
       };
       placesList.append(createCard(сardObject));
+
     });
   })
   .catch((error) => console.log("данные не обработаны / promise:", error));
@@ -168,7 +178,9 @@ function addNewCardSubmit(event) {
         openImageFunction: openPopupImage,
         cardId: card._id,
         ownerId: card.owner._id,
-        profileId: card.owner._id
+        profileId: card.owner._id,
+        cardNumberLikes: card.likes.length,
+        cardHaveMyLikeElement: 'false'
       };
       const newCard = createCard(newCardObject);
       placesList.prepend(newCard);

@@ -6,8 +6,6 @@ const config = {
   },
 };
 
-
-
 //функция проверки ответа от сервера
 
 function checkData(res) {
@@ -15,7 +13,7 @@ function checkData(res) {
   return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-//функция изменения аватара пользователя
+//функция запроса к серверу: изменение аватара пользователя
 
 function editAvatar(avatar) {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
@@ -44,7 +42,7 @@ const getInitialCards = () => {
   .then((res) => checkData(res));
 };
 
-//функция редактирования профиля
+//функция запроса к серверу: редактирования профиля
 
 const editUserData = (profileTitle, profileDescription) => {
   return fetch(`${config.baseUrl}/users/me`, {
@@ -57,7 +55,7 @@ const editUserData = (profileTitle, profileDescription) => {
   }).then((res) => checkData(res));
 };
 
-//функция добавление карточки
+//функция запроса к серверу: добавление карточки
 
 function addCard(name, link) {
   return fetch(`${config.baseUrl}/cards`, {
@@ -80,11 +78,33 @@ function requestDeleteCard(cardId) {
   .then((res) => checkData(res))
 }
 
+//функция запроса к серверу: добавить лайк
+
+function sendAddLikeCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  })
+  .then((res) => checkData(res));
+}
+
+//функция запроса к серверу: убрать лайк
+
+function sendDeleteLikeCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  })
+  .then((res) => checkData(res));
+};
+
 export {
   editAvatar,
   getInitialCards,
   getUserData,
   editUserData,
   addCard,
-  requestDeleteCard
+  requestDeleteCard,
+  sendAddLikeCard,
+  sendDeleteLikeCard
 };
