@@ -92,7 +92,6 @@ enableValidation(validationConfig);
 
 Promise.all([getUserData(), getInitialCards()])
   .then(([profileData, cardsData]) => {
-    //profileId = profileData._id;
     profileTitle.textContent = profileData.name;
     profileDescription.textContent = profileData.about;
     profileAvatar.style.backgroundImage = `url(\\${profileData.avatar})`;
@@ -103,7 +102,10 @@ Promise.all([getUserData(), getInitialCards()])
         link: card.link,
         likeFunction: likeCard,
         deleteFunction: deleteCard,
-        openImageFunction: openPopupImage
+        openImageFunction: openPopupImage,
+        cardId: card._id,
+        ownerId: card.owner._id,
+        profileId: profileData._id
       };
       placesList.append(createCard(сardObject));
     });
@@ -157,12 +159,16 @@ function addNewCardSubmit(event) {
 
   addCard(namePlaceInput.value, linkPlaceInput.value)
     .then((card) => {
+      console.log(card)
       const newCardObject = {
         name: card.name,
         link: card.link,
         likeFunction: likeCard,
         deleteFunction: deleteCard,
-        openImageFunction: openPopupImage
+        openImageFunction: openPopupImage,
+        cardId: card._id,
+        ownerId: card.owner._id,
+        profileId: card.owner._id
       };
       const newCard = createCard(newCardObject);
       placesList.prepend(newCard);

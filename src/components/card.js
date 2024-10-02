@@ -1,3 +1,7 @@
+import { 
+  requestDeleteCard
+} from "./api.js";
+
 //константы
 
 const cardTemplate = document.querySelector('#card-template').content;
@@ -15,6 +19,13 @@ export function createCard(cardData) {
   cardTitle.textContent = cardData.name;
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
+  card.dataset.cardId = cardData.cardId;
+  card.dataset.ownerId = cardData.ownerId;
+
+  if(card.dataset.ownerId !== cardData.profileId) {
+    cardDeleteButton.remove();
+  }//заблокировать кнопку удаления на карточках созданных другим пользователем
+
 
   cardDeleteButton.addEventListener('click', cardData.deleteFunction);
   cardLikeButton.addEventListener('click', cardData.likeFunction);
@@ -27,6 +38,7 @@ export function createCard(cardData) {
 
 export function deleteCard(event) {
   const placeDelete = event.target.closest('.card');
+  requestDeleteCard(placeDelete.dataset.cardId);
   placeDelete.remove();
 };
 

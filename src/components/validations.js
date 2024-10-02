@@ -1,6 +1,6 @@
 //объект настороек функции валидации
 
-const validationConfig = {
+export const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
@@ -80,7 +80,7 @@ const toggleButtonState = (inputList, buttonElement, validationConfig) => {
 
 //функция активации валидации
 
-const enableValidation = (validationConfig) => {
+export const enableValidation = (validationConfig) => {
   const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
   formList.forEach((formElement) => {
     setEventListeners(formElement, validationConfig);
@@ -89,17 +89,11 @@ const enableValidation = (validationConfig) => {
 
 //функция очистки ошибок валидации формы
 
-function clearValidation(profileForm, validationConfig) {
+export function clearValidation(profileForm, validationConfig) {
   const buttonElement = profileForm.querySelector(validationConfig.submitButtonSelector);
   const inputList = Array.from(profileForm.querySelectorAll(validationConfig.inputSelector));
   inputList.forEach((inputElement) => {
     hideInputError(profileForm, inputElement, validationConfig);
   });
   toggleButtonState(inputList, buttonElement, validationConfig);
-};
-
-export {
-  enableValidation, 
-  validationConfig,
-  clearValidation
 };

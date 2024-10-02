@@ -6,6 +6,8 @@ const config = {
   },
 };
 
+
+
 //функция проверки ответа от сервера
 
 function checkData(res) {
@@ -68,10 +70,21 @@ function addCard(name, link) {
   }).then((res) => checkData(res));
 };
 
+//функция удаления карточки с сервера
+
+function requestDeleteCard(cardId) {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  })
+  .then((res) => checkData(res))
+}
+
 export {
   editAvatar,
   getInitialCards,
   getUserData,
   editUserData,
-  addCard
+  addCard,
+  requestDeleteCard
 };
