@@ -3,8 +3,7 @@ import "./pages/index.css";
 import { 
   createCard,
   likeCard,
-  deleteCard,
-  isMyLike
+  deleteCard
 } from "./components/card.js";
 
 import { 
@@ -15,7 +14,6 @@ import {
 
 import { 
   enableValidation, 
-  validationConfig, 
   clearValidation
 } from "./components/validations.js";
 
@@ -26,6 +24,17 @@ import {
   editUserData,
   addCard
 } from "./components/api.js";
+
+//объект настороек функции валидации
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 //константы
 
@@ -99,12 +108,7 @@ Promise.all([getUserData(), getInitialCards()])
 
     cardsData.forEach((card) => {
 
-      let cardHaveMyLike = '';
-      if(isMyLike(card, profileData._id)) {
-        cardHaveMyLike = 'true';
-      } else {cardHaveMyLike = 'false'};
-
-      const сardObject = {
+        const сardObject = {
         name: card.name,
         link: card.link,
         likeFunction: likeCard,
@@ -114,7 +118,7 @@ Promise.all([getUserData(), getInitialCards()])
         ownerId: card.owner._id,
         profileId: profileData._id,
         cardNumberLikes: card.likes.length,
-        cardHaveMyLikeElement: cardHaveMyLike
+        likesArray: card.likes
       };
       placesList.append(createCard(сardObject));
 
@@ -129,8 +133,8 @@ function changeAvatarFormSubmit(evt) {
   const buttonText = popupAvatarButton.textContent;
   popupAvatarButton.textContent = "Сохранение...";
   editAvatar(popupInputTypeUrl.value)
-    .then((Data) => {
-      profileAvatar.style.backgroundImage = `url(\\${Data.avatar})`;
+    .then((data) => {
+      profileAvatar.style.backgroundImage = `url(\\${dataata.avatar})`;
       closePopup(popupEditAvatar);
     })
     .catch((error) => console.log("Данные аватара не обработаны", error))
@@ -169,7 +173,6 @@ function addNewCardSubmit(event) {
 
   addCard(namePlaceInput.value, linkPlaceInput.value)
     .then((card) => {
-      console.log(card)
       const newCardObject = {
         name: card.name,
         link: card.link,
@@ -180,7 +183,7 @@ function addNewCardSubmit(event) {
         ownerId: card.owner._id,
         profileId: card.owner._id,
         cardNumberLikes: card.likes.length,
-        cardHaveMyLikeElement: 'false'
+        likesArray: card.likes
       };
       const newCard = createCard(newCardObject);
       placesList.prepend(newCard);

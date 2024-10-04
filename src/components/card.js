@@ -25,7 +25,7 @@ export function createCard(cardData) {
 
   cardNumberOfLikes.textContent = cardData.cardNumberLikes;//показать количество лайков на карточке
 
-  if(cardData.cardHaveMyLikeElement === 'true') {
+  if(isMyLike(cardData.likesArray, cardData.profileId)) {
     cardLikeButton.classList.add('card__like-button_is-active');
   };//закрасить кнопку лайка на пролайканных карточках
 
@@ -33,10 +33,11 @@ export function createCard(cardData) {
   card.dataset.ownerId = cardData.ownerId;
 
   if(card.dataset.ownerId !== cardData.profileId) {
-    cardDeleteButton.remove();
-  };//заблокировать кнопку удаления на карточках созданных другим пользователем
+    cardDeleteButton.remove(); //заблокировать кнопку удаления на карточках созданных другим пользователем
+  } else {
+    cardDeleteButton.addEventListener('click', cardData.deleteFunction)
+  };
 
-  cardDeleteButton.addEventListener('click', cardData.deleteFunction);
   cardLikeButton.addEventListener('click', cardData.likeFunction);
   cardImage.addEventListener('click', () => {cardData.openImageFunction(cardData)});
 
@@ -47,33 +48,27 @@ export function createCard(cardData) {
 
 export function deleteCard(event) {
   const placeDelete = event.target.closest('.card');
-  requestDeleteCard(placeDelete.dataset.cardId);
-  placeDelete.remove();
+  requestDeleteCard(placeDelete.dataset.cardId)
+    .then(placeDelete.remove())
+    .catch((err) => console.log("Карта не удалена", err));
 };
 
 //функция лайка карточки
 
 export function likeCard (event) {
-  if (event.target.classList.contains('card__like-button')) {
-    let card = event.target.closest('.card');
-    let cardNumberOfLikes = card.querySelector('.card__number-likes');
-    if(event.target.classList.contains('card__like-button_is-active')) {
-      sendDeleteLikeCard(card.dataset.cardId)
-        .then((data) => {
-          cardNumberOfLikes.textContent = data.likes.length;
-        });
-    } else {
-        sendAddLikeCard(card.dataset.cardId)
-          .then((data) => {
-            cardNumberOfLikes.textContent = data.likes.length;
-          });
-    };
-    event.target.classList.toggle('card__like-button_is-active');
-  };
+  const card = event.target.closest('.card');
+  const cardNumberOfLikes = card.querySelector('.card__number-likes');
+  const likeMethod = event.target.classList.contains('card__like-button_is-active') ? sendDeleteLikeCard : sendAddLikeCard;
+  likeMethod(card.dataset.cardId)
+    .then((data) => {
+      cardNumberOfLikes.textContent = data.likes.length; 
+      event.target.classList.toggle('card__like-button_is-active'); 
+    })
+    .catch((err) => console.log("Количество лайков не определено", err));
 };
 
 //функция проверки наличия лайка пользователя на карточке
 
-export function isMyLike(cardData, profileId) {
-  return cardData.likes.some((item) => item._id === profileId);
-}
+function isMyLike(likesArray, profileId) {
+  return likesArray.some((item) => item._id === profileId);
+};
